@@ -1,6 +1,6 @@
 ## Create ACM Certificate
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "example.com" # Replace with your domain name
+  domain_name       = var.domain_name # Replace with your domain name
   validation_method = "DNS"
 
   lifecycle {

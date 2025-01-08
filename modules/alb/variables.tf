@@ -65,26 +65,6 @@ variable "alb_sg_name" {
   description = "The name of the security group for the ALB"
 }
 
-variable "s3_bucket_alb_logs" {
-  type        = string
-  description = "The name of the S3 bucket to use for ALB logs"
-}
-
-variable "bucket_prefix_access_logs" {
-  type        = string
-  description = "The prefix to use for ALB access logs"
-}
-
-variable "bucket_prefix_connection_logs" {
-  type        = string
-  description = "The prefix to use for ALB connection logs"
-}
-
-variable "enabled" {
-  type        = bool
-  description = "Whether to enable ALB logs"
-}
-
 variable "enable_deletion_protection" {
   type        = bool
   description = "Whether to enable deletion protection for the ALB"
@@ -93,4 +73,9 @@ variable "enable_deletion_protection" {
 variable "stage" {
   type        = string
   description = "The environment to use for the ALB"
+}
+
+variable "target_id" {
+  type        = string
+  description = "The ID of the target to use for the target group"
 }

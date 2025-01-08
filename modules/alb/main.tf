@@ -6,16 +6,6 @@ resource "aws_lb" "alb" {
   security_groups            = [aws_security_group.security_group_alb.id]
   subnets                    = var.public_subnets
   enable_deletion_protection = var.enable_deletion_protection
-  access_logs {
-    bucket  = var.s3_bucket_alb_logs
-    enabled = var.enabled
-    prefix  = var.bucket_prefix_access_logs
-  }
-  connection_logs {
-    bucket  = var.s3_bucket_alb_logs
-    enabled = var.enabled
-    prefix  = var.bucket_prefix_connection_logs
-  }
   tags = merge({
     Name = "${var.alb_name}-${var.stage}"
   })
@@ -85,4 +75,12 @@ resource "aws_alb_listener_rule" "main" {
       values = [var.domain_name]
     }
   }
+}
+
+
+## 
+resource "aws_lb_target_group_attachment" "test" {
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = var.target_id
+  port             = 80
 }

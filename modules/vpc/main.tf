@@ -9,7 +9,7 @@ resource "aws_vpc" "main" {
 
 # Create a Private Subnet
 resource "aws_subnet" "private" {
-  count             = var.az_count
+  count             = length(var.availability_zones)
   cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
   vpc_id            = aws_vpc.main.id
   availability_zone = var.availability_zones[count.index]
@@ -21,8 +21,8 @@ resource "aws_subnet" "private" {
 
 # Create a Public Subnet
 resource "aws_subnet" "public" {
-  count                   = var.az_count
-  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, var.az_count + count.index)
+  count                   = length(var.availability_zones)
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, length(var.availability_zones) + count.index)
   vpc_id                  = aws_vpc.main.id
   availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
@@ -47,7 +47,6 @@ resource "aws_route" "internet_access" {
 
 # Create a NAT gateway with an EIP for each private subnet to get internet connectivity
 resource "aws_eip" "gw" {
-  count = 1
   depends_on = [
     aws_internet_gateway.igw
   ]
@@ -56,7 +55,6 @@ resource "aws_eip" "gw" {
 }
 
 resource "aws_nat_gateway" "gw" {
-  count         = 1
   subnet_id     = element(aws_subnet.public.*.id, count.index)
   allocation_id = element(aws_eip.gw.*.id, count.index)
   tags          = merge({ Name = "${var.name}-natgw-${var.stage}" }, var.tags)
@@ -77,7 +75,7 @@ resource "aws_route_table" "private" {
 
 # Explicitly associate the newly created route tables to the private subnets (so they don't default to the main route table)
 resource "aws_route_table_association" "private" {
-  count          = var.az_count
+  count          = length(var.availability_zones)
   subnet_id      = element(aws_subnet.private.*.id, count.index)
   route_table_id = aws_route_table.private.id
   depends_on     = [aws_route_table.private]

@@ -24,3 +24,9 @@ variable "tags" {
   default     = {}
   description = "A map of tags to add to all resources"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "Domain name for the ACM certificate"
+  default     = "example.com"
+}

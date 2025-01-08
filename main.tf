@@ -11,19 +11,16 @@ module "alb" {
   alb_name                      = "alb-prod"
   alb_sg_name                   = "alb-sg-prod"
   aws_acm_certificate_arn       = aws_acm_certificate.cert.arn
-  domain_name                   = "example.com" # Replace with your domain name
+  domain_name                   = var.domain_name # Replace with your domain name
   health_check_path             = "/health"
   lb_target_group_name          = "ec2-tg-prod"
   protocol                      = "HTTP"
   public_subnets                = module.vpc.public_subnets
-  ssl_policy                    = "ELBSecurityPolicy-FS-1-1-2019-08"
+  ssl_policy                    = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   target_group_port             = 80
   target_type                   = "instance"
+  target_id                     = module.ec2.ec2_id
   vpc_id                        = module.vpc.vpc_id
-  s3_bucket_alb_logs            = ""
-  bucket_prefix_access_logs     = ""
-  bucket_prefix_connection_logs = ""
-  enabled                       = false
   enable_deletion_protection    = false
   stage                         = var.stage
 }
