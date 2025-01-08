@@ -17,7 +17,7 @@ resource "aws_lb" "alb" {
     prefix  = var.bucket_prefix_connection_logs
   }
   tags = merge({
-    Name = "${var.alb_name}-${var.environment}"
+    Name = "${var.alb_name}-${var.stage}"
   })
 }
 

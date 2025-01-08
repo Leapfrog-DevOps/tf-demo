@@ -90,7 +90,7 @@ variable "enable_deletion_protection" {
   description = "Whether to enable deletion protection for the ALB"
 }
 
-variable "environment" {
+variable "stage" {
   type        = string
   description = "The environment to use for the ALB"
 }

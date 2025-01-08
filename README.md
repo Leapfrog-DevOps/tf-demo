@@ -1,37 +1,116 @@
-[<img src="./leapfrog-logo.png" alt="WAF Logo" width="190" height="40">](https://www.lftechnology.com/)
+[<img src="./leapfrog-logo.png" alt="Leapfrog Logo" width="190" height="40">](https://www.lftechnology.com/)
 
-
-# WAF and Shield Terraform Configuration [![AWS_logo](https://docs.aws.amazon.com/assets/r/images/aws_logo_dark.png)](https://aws.amazon.com/waf/)
+# AWS WAF Implementation with ALB and EC2 [![AWS_logo](https://docs.aws.amazon.com/assets/r/images/aws_logo_dark.png)](https://aws.amazon.com/waf/)
 
 ## Overview
-This repository contains Terraform configuration for deploying a WAF in AWS.
+This repository contains Terraform configurations to implement AWS WAF (Web Application Firewall) for securing applications running on EC2 instances behind an Application Load Balancer (ALB).
+
+## Architecture
+`Internet → WAF → ALB → EC2 Instances`
+
+![alt text](<WAF with ALB.png>)
+
+
+## Features
+- AWS WAF implementation with custom rule sets
+- ALB integration with WAF
+- EC2 instance configuration
+- Security group configurations
+- Automated deployment using Terraform
 
 ## Prerequisites
-- Terraform installed
-- AWS account with appropriate permissions
-- AWS CLI configured
-- AWS IAM user with appropriate permissions
+- Terraform >= 5.82.0
+- AWS CLI configured with appropriate credentials
+- IAM permissions for:
+  - WAF
+  - EC2
+  - ALB
+  - Security Groups
+  - VPC
 
-## Purpose
-This repository is designed to help deploy a WAF in AWS to help protect your web applications from common web exploits especially DDoS attacks and other malicious traffic. AWS Shield is also included in this configuration which helps protect your AWS resources from DDoS attacks as well.
-- WAF
-- WAF Rule
-- WAF Rule Group
-- WAF Rule Group Association
+## Components
+1. **WAF Configuration**
+   - Custom rule groups
+   - Rate limiting rules
+   - IP blacklisting/whitelisting
+   - SQL injection protection
+   - XSS protection
+
+2. **ALB Setup**
+   - HTTPS listener
+   - Target group configuration
+   - Health checks
+
+3. **EC2 Configuration**
+   - Auto Scaling Group
+   - Security groups
+   - Instance profile
 
 
 ## Quick Start
 
-1. **Terraform Initialization:**
-   - `terraform init`
+1. Clone the Repository
+    ```bash
+    git clone https://github.com/Leapfrog-DevOps/tf-demo.git
+    ```
 
-2. **Validation:**
-   - `terraform validate`
+2. Configure Variables
+    - Update `terraform.tfvars` with your specific values
+    - Modify region and environment settings as needed
 
-3. **Plan:**
-   - `terraform plan`
+3. Initialize Terraform
+    ```bash
+    terraform init
+    ```
 
-4. **Apply:**
-   - `terraform apply`
+4. Validate Configuration
+    ```bash
+    terraform validate
+    ```
 
-Ensure to modify names and variables according to your specifications before deploying.
+5. Review the Plan
+    ```bash
+    terraform plan
+    ```
+
+6. Apply Configuration
+    ```bash
+    terraform apply
+    ```
+
+
+## WAF Rules Included
+1. Rate-based rules for DDoS protection
+2. AWS Managed Rules
+    - Common Rule Set (CRS)
+    - SQL injection prevention
+    - Cross-site scripting (XSS) prevention
+    - Bad bots protection
+    - Bad input rule set
+    - Admin Protection Rule Set
+4. Geographic-based rules
+
+## Maintenance
+1. Regular updates of WAF rules
+2. Monitoring and logging configuration
+3. Performance optimization
+4. Security patch management
+
+## Best Practices
+1. Always use HTTPS
+2. Implement proper logging
+3. Regular security audits
+4. Keep WAF rules updated
+5. Monitor WAF metrics
+
+## Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push to the branch
+5. Create a Pull Request
+
+
+
+## Support
+For support, please contact the DevOps team or raise an issue in the repository.
