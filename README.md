@@ -111,6 +111,9 @@ This repository contains Terraform configurations to implement AWS WAF (Web Appl
 5. Create a Pull Request
 
 
+> **ⓘ Info:** This repo includes a simple implementation of AWS WAF with ALB and EC2. It is intended for understanding the creation of WAF and attach it with certain service and may not be suitable for production use.
+> There are a lot need to be changed and improved according to the needs and requirements.
+
 
 ## Support
 For support, please contact the DevOps team or raise an issue in the repository.
