@@ -10,4 +10,11 @@ terraform {
 # default provider to N. Virginia i.e. us-east-1
 provider "aws" {
   region = "us-east-1"
+  default_tags {
+    tags = {
+      Name      = "tf-demo"
+      Creator   = "devops"
+      Project   = "Infrastructure"
+    }
+  }
 }

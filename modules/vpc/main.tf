@@ -47,6 +47,7 @@ resource "aws_route" "internet_access" {
 
 # Create a NAT gateway with an EIP for each private subnet to get internet connectivity
 resource "aws_eip" "gw" {
+  count = length(var.availability_zones)
   depends_on = [
     aws_internet_gateway.igw
   ]
@@ -55,6 +56,7 @@ resource "aws_eip" "gw" {
 }
 
 resource "aws_nat_gateway" "gw" {
+  count         = length(var.availability_zones)
   subnet_id     = element(aws_subnet.public.*.id, count.index)
   allocation_id = element(aws_eip.gw.*.id, count.index)
   tags          = merge({ Name = "${var.name}-natgw-${var.stage}" }, var.tags)

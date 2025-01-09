@@ -15,7 +15,7 @@ module "ec2" {
   source                  = "./modules/ec2"
   ec2_instance_name       = "ec2-instance-${var.stage}"
   ec2_instance_type       = "t2.micro"
-  ami_id                  = "ami-04cbc90abb08f0321"
+  ami_id                  = "ami-0e2c8caa4b6378d8c"
   ec2_security_group_name = "ec2-sg-${var.stage}"
   vpc_id                  = module.vpc.vpc_id
   vpc_cidr                = module.vpc.vpc_cidr

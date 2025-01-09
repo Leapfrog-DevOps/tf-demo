@@ -28,5 +28,5 @@ variable "tags" {
 variable "domain_name" {
   type        = string
   description = "Domain name for the ACM certificate"
-  default     = "example.com"
+  default     = "example.com" # Replace with your domain name
 }
