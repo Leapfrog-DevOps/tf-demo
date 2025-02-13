@@ -104,3 +104,35 @@ resource "aws_wafv2_web_acl_association" "main" {
   resource_arn = var.alb_arn
   web_acl_arn  = aws_wafv2_web_acl.main.arn
 }
+
+resource "aws_cloudwatch_log_group" "waf_log_group" {
+  name              = "/aws/waf/${var.waf_name}"
+  retention_in_days = var.log_retention_days
+  tags              = var.tags
+}
+
+resource "aws_wafv2_web_acl_logging_configuration" "main" {
+  count                   = var.enable_logging ? 1 : 0
+  log_destination_configs = [aws_cloudwatch_log_group.waf_log_group.arn]
+  resource_arn            = aws_wafv2_web_acl.main.arn
+
+  dynamic "logging_filter" {
+    for_each = var.logging_filter_enabled ? [1] : []
+    content {
+      default_behavior = var.logging_filter_default_behavior
+
+      dynamic "filter" {
+        for_each = var.logging_filters
+        content {
+          behavior = filter.value.behavior
+          condition {
+            action_condition {
+              action = filter.value.action
+            }
+          }
+          requirement = filter.value.requirement
+        }
+      }
+    }
+  }
+}

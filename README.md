@@ -1,6 +1,6 @@
 [<img src="./leapfrog-logo.png" alt="Leapfrog Logo" width="190" height="40">](https://www.lftechnology.com/)
 
-# AWS WAF Implementation with ALB and EC2 [![AWS_logo](https://docs.aws.amazon.com/assets/r/images/aws_logo_dark.png)](https://aws.amazon.com/waf/)
+# AWS WAF Implementation with ALB and EC2 [![AWS_logo](https://docs.aws.amazon.com/assets/r/images/aws_logo_light.svg)](https://aws.amazon.com/waf/)
 
 ## Overview
 This repository contains Terraform configurations to implement AWS WAF (Web Application Firewall) for securing applications running on EC2 instances behind an Application Load Balancer (ALB).

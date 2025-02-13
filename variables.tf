@@ -7,6 +7,7 @@ variable "stage" {
 variable "name" {
   description = "Name  (e.g. `app` or `cluster`)"
   type        = string
+  default     = "app"
 }
 
 variable "tls_private_key_algorithm" {

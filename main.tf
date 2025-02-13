@@ -1,7 +1,7 @@
 ## Calling the VPC module
 module "vpc" {
   source             = "./modules/vpc"
-  name               = "vpc-"
+  name               = "vpc-prod"
   availability_zones = ["us-east-1a", "us-east-1b"]
 }
 
@@ -27,14 +27,32 @@ module "alb" {
 
 ## Calling the WAF module
 module "waf_prod" {
-  source          = "./modules/waf"
-  waf_name        = "waf-ddos-protection-${var.stage}"
-  waf_description = "WAF for DDOS protection for ${var.stage} environment"
-  waf_scope       = "REGIONAL"
+  source                          = "./modules/waf"
+  waf_name                        = "waf-ddos-protection-${var.stage}"
+  waf_description                 = "WAF for DDOS protection for ${var.stage} environment"
+  waf_scope                       = "REGIONAL"
+  enable_logging                  = true
+  log_retention_days              = 60
+  logging_filter_default_behavior = "KEEP"
+  logging_filter_enabled          = true
+  logging_filters = [
+    {
+      action      = "BLOCK"
+      behavior    = "KEEP"
+      requirement = "MEETS_ALL"
+    }
+  ]
   waf_rules = [
     {
+      name       = "rate-limiting"
+      priority   = 1
+      type       = "rate_based"
+      rate_limit = 500
+      action     = "block"
+    },
+    {
       name                      = "AWS-AWSManagedRulesAmazonIpReputationList"
-      priority                  = 1
+      priority                  = 2
       type                      = "managed_rule_group"
       managed_rule_group_name   = "AWSManagedRulesAmazonIpReputationList"
       managed_rule_group_vendor = "AWS"
@@ -42,7 +60,7 @@ module "waf_prod" {
     },
     {
       name                      = "AWS-AWSManagedRulesCommonRuleSet"
-      priority                  = 2
+      priority                  = 3
       type                      = "managed_rule_group"
       managed_rule_group_name   = "AWSManagedRulesCommonRuleSet"
       managed_rule_group_vendor = "AWS"
@@ -50,7 +68,7 @@ module "waf_prod" {
     },
     {
       name                      = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
-      priority                  = 3
+      priority                  = 4
       type                      = "managed_rule_group"
       managed_rule_group_name   = "AWSManagedRulesKnownBadInputsRuleSet"
       managed_rule_group_vendor = "AWS"
@@ -58,7 +76,7 @@ module "waf_prod" {
     },
     {
       name                      = "AWS-AWSManagedRulesSQLiRuleSet"
-      priority                  = 4
+      priority                  = 5
       type                      = "managed_rule_group"
       managed_rule_group_name   = "AWSManagedRulesSQLiRuleSet"
       managed_rule_group_vendor = "AWS"
@@ -66,7 +84,7 @@ module "waf_prod" {
     },
     {
       name                      = "AWS-AWSManagedRulesLinuxRuleSet"
-      priority                  = 5
+      priority                  = 6
       type                      = "managed_rule_group"
       managed_rule_group_name   = "AWSManagedRulesLinuxRuleSet"
       managed_rule_group_vendor = "AWS"
@@ -74,7 +92,7 @@ module "waf_prod" {
     },
     {
       name                      = "AWS-AWSManagedRulesAdminProtectionRuleSet"
-      priority                  = 6
+      priority                  = 7
       type                      = "managed_rule_group"
       managed_rule_group_name   = "AWSManagedRulesAdminProtectionRuleSet"
       managed_rule_group_vendor = "AWS"
@@ -82,19 +100,21 @@ module "waf_prod" {
     },
     {
       name          = "geo-location-blocking"
-      priority      = 7
+      priority      = 8
       type          = "geo_match"
-      country_codes = ["US"]
+      country_codes = ["US"] ## Replace with your country codes to allow access; e.g., ["US", "NP"]. not_statement has been used on the waf module to allow access to the specified country codes.
       action        = "block"
-    },
-    {
-      name       = "rate-limiting"
-      priority   = 8
-      type       = "rate_based"
-      rate_limit = 500
-      action     = "block"
     }
   ]
   alb_arn = module.alb.alb_arn
 
+}
+
+
+## Calling the Shield module
+## Note: Consider the cost of Shield Advanced before enabling it.
+module "shield" {
+  source       = "./modules/shield"
+  resource_arn = module.alb.alb_arn
+  stage        = var.stage
 }
