@@ -7,6 +7,7 @@ variable "stage" {
 variable "name" {
   description = "Name  (e.g. `app` or `cluster`)"
   type        = string
+  default     = "app"
 }
 
 variable "tls_private_key_algorithm" {
@@ -28,5 +29,5 @@ variable "tags" {
 variable "domain_name" {
   type        = string
   description = "Domain name for the ACM certificate"
-  default     = "example.com"
+  default     = "example.com" # Replace with your domain name
 }
